@@ -1,2 +1,2 @@
 # spring-security
-En este proyecto se practica temas de spring security, JWT, OAuth2
+En este proyecto se creó con la finalidad de practicar temas de spring security, JWT, OAuth2
