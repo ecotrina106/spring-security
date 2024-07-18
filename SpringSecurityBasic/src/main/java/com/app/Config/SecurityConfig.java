@@ -44,6 +44,26 @@ solicitudes HTTP.
 public class SecurityConfig {
     //SecurityFilterChain -> cadena de filtros del spring security,es como un conjunto de middlewares de validación
     //httpSecurity -> objeto que recorre todos los filtros de la cadena de filtro(chain filter)
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        return httpSecurity
+//                .csrf(csrf -> csrf.disable()) //Vulnerabildiad explotada en formularios
+//                //Usado para authentication basica de user y pass
+//                .httpBasic(Customizer.withDefaults())
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //Sesion sin estado, no manejamos la sesion internamente, si no con tokens por ejemplo
+//                //Definicion de permisos de APIS
+//                .authorizeHttpRequests(http -> {
+//                    //PUBLICSO - Permite a todos ver la API, salvo que se haga un basic auth erroneo
+//                    http.requestMatchers(HttpMethod.GET,"/auth/hello").permitAll();
+//                    //PRIVADOS - Permite a todos los que tienen permiso CREATE
+//                    http.requestMatchers(HttpMethod.GET,"/auth/hello-secured").hasAuthority("CREATE");
+//
+//                    //NO ESPECIFICADO
+//                    http.anyRequest().authenticated();
+//                })
+//                .build();
+//    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -51,16 +71,6 @@ public class SecurityConfig {
                 //Usado para authentication basica de user y pass
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //Sesion sin estado, no manejamos la sesion internamente, si no con tokens por ejemplo
-                //Definicion de permisos de APIS
-                .authorizeHttpRequests(http -> {
-                    //PUBLICSO - Permite a todos ver la API, salvo que se haga un basic auth erroneo
-                    http.requestMatchers(HttpMethod.GET,"/auth/hello").permitAll();
-                    //PRIVADOS - Permite a todos los que tienen permiso CREATE
-                    http.requestMatchers(HttpMethod.GET,"/auth/hello-secured").hasAuthority("CREATE");
-
-                    //NO ESPECIFICADO
-                    http.anyRequest().authenticated();
-                })
                 .build();
     }
 
