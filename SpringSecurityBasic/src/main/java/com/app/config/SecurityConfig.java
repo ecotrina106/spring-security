@@ -1,9 +1,8 @@
-package com.app.Config;
+package com.app.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.app.service.UserDetailServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -64,6 +64,26 @@ public class SecurityConfig {
 //                .build();
 //    }
 
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        return httpSecurity
+//                .csrf(csrf -> csrf.disable())
+//                .httpBasic(Customizer.withDefaults())
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(http -> {
+//                    // Configurar los endpoints publicos
+//                    http.requestMatchers(HttpMethod.GET, "/auth/get").permitAll();
+//
+//                    // Configurar los endpoints privados
+//                    http.requestMatchers(HttpMethod.POST, "/auth/post").hasAnyRole("ADMIN", "DEVELOPER");
+//                    http.requestMatchers(HttpMethod.PATCH, "/auth/patch").hasAnyAuthority("REFACTOR");
+//
+//                    // Configurar el resto de endpoint - NO ESPECIFICADOS
+//                    http.anyRequest().denyAll();
+//                })
+//                .build();
+//    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -81,6 +101,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    //============================== Parte Inicial donde no se tenia BD
     //AuthenticationProvider -> es una interfaz que tiene muchos proveedores de auth implementandolo
     //en este caso se usará DaoAuthenticationProvider, para obtener los usuariosd e la BD
     /*DaoAuthenticationProvider -> para esta arquitectura planteada, ver imagen de readme.md del repo general
@@ -88,21 +109,45 @@ public class SecurityConfig {
         UserDetailsService - servicio especificado para obtener info de los usarios de BD. OJO que se debe usar la clase de
                              Spring Security definida con ese nombre "UserDetailsService", no confundir con alguno que podamos crear nosotros
     */
+//    @Bean
+//    public AuthenticationProvider authenticationProvider(){
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//        provider.setPasswordEncoder(passwordEncoder());
+//        provider.setUserDetailsService(userDetailsService());
+//        return provider;
+//    }
+    //==============================
+
+    //AuthenticationProvider -> es una interfaz que tiene muchos proveedores de auth implementandolo
+    //en este caso se usará DaoAuthenticationProvider, para obtener los usuariosd e la BD
+    /*DaoAuthenticationProvider -> para esta arquitectura planteada, ver imagen de readme.md del repo general
+        PasswordEncoder - es el que se necesita para revisión de encriptacion de la contraseña para añadrilo a BD
+        UserDetailsService - servicio especificado para obtener info de los usarios de BD. OJO que se debe usar la clase de
+                             Spring Security definida con ese nombre "UserDetailsService", no confundir con alguno que podamos crear nosotros
+
+      Se usa en este caso el UserDetailServiceImpl que es un servicio definido por nosotros que implementa la funcion para mapear el User de la bd
+      a un user de spring security
+    */
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider(UserDetailServiceImpl userDetailService){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService());
+        provider.setUserDetailsService(userDetailService);
         return provider;
     }
 
     //PasswordEncoder -> utilizado para el DaoAuthenticationProvider para revision de pass
     //NoOpPasswordEncoder -> por ahora utilizado apra aprender, SOLO DEBE SER USADO EN PRUEB, no en producción, OJO esta deprecated.
+//    @Bean
+//    public PasswordEncoder passwordEncoder(){
+//        return NoOpPasswordEncoder.getInstance();
+//    }
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
+    //===================================USADO CUANDO NO SE TENIA BD, solo explicativo
     //UserDetailsService -> Interfaz de Spring Security para manejar la data de usuarios provenientes de BD
     //Además se tiene un UserDetails y User del mismo Spring Security, NO CONFUNDIR con nuestro dominio
 
