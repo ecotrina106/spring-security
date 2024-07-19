@@ -6,6 +6,7 @@ import com.app.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -98,6 +99,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) //Vulnerabildiad explotada en formularios
                 //Usado para authentication basica de user y pass
                 .httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(http -> {
+                    http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
+                })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //Sesion sin estado, no manejamos la sesion internamente, si no con tokens por ejemplo
                 //Agregamos el filtro del JWT creado, y se pone antes del filtro de authentication
                 .addFilterBefore(new JWTTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
