@@ -1,6 +1,9 @@
 package com.app.config;
 
+import com.app.config.filter.JWTTokenValidator;
 import com.app.service.UserDetailServiceImpl;
+import com.app.util.JwtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +23,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,10 @@ solicitudes HTTP.
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
     //SecurityFilterChain -> cadena de filtros del spring security,es como un conjunto de middlewares de validación
     //httpSecurity -> objeto que recorre todos los filtros de la cadena de filtro(chain filter)
 //    @Bean
@@ -91,6 +99,8 @@ public class SecurityConfig {
                 //Usado para authentication basica de user y pass
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //Sesion sin estado, no manejamos la sesion internamente, si no con tokens por ejemplo
+                //Agregamos el filtro del JWT creado, y se pone antes del filtro de authentication
+                .addFilterBefore(new JWTTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
     }
 

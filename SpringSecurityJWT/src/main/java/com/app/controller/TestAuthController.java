@@ -4,7 +4,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/method")
 //Anotacion habilitada por spring security al poner EnableMethodSecurity en el SecurityConfig
 @PreAuthorize("denyAll()")
 public class TestAuthController {
