@@ -71,8 +71,8 @@ public class JwtUtils {
     public String extractUserName(DecodedJWT decodedJWT){
         return decodedJWT.getSubject();
     }
-    public String getSpecificClaim(DecodedJWT decodedJWT, String claimName){
-        return decodedJWT.getClaim(claimName).toString();
+    public Claim getSpecificClaim(DecodedJWT decodedJWT, String claimName){
+        return decodedJWT.getClaim(claimName);
     }
     public Map<String, Claim> getAllClaims(DecodedJWT decodedJWT){
         return decodedJWT.getClaims();

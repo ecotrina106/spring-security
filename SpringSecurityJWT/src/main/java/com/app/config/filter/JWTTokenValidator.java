@@ -44,7 +44,7 @@ public class JWTTokenValidator extends OncePerRequestFilter {
              //extraemos userName
              String userName = jwtUtils.extractUserName(decodedJWT);
              //obtenemos authorities en un string separado por comas, esto es por como lo hemos programado
-             String authoritiesString = jwtUtils.getSpecificClaim(decodedJWT,"authorities");
+             String authoritiesString = jwtUtils.getSpecificClaim(decodedJWT,"authorities").asString();
 
              //Se usa AuthorityUtils de spring security que devuelve un collection de Authorities a partir del string separado por comas
             Collection<? extends GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesString);
@@ -57,7 +57,12 @@ public class JWTTokenValidator extends OncePerRequestFilter {
 
         }
 
-        //Si el token es null continua la cada de filtros y fallará por defecto
-        filterChain.doFilter(request,response);
+        try {
+            //Si el token es null continua la cada de filtros y fallará por defecto
+            filterChain.doFilter(request, response);
+        }
+        catch(Exception e){
+            throw  new ServletException("fallo gaa");
+        }
     }
 }

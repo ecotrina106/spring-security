@@ -98,9 +98,19 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(csrf -> csrf.disable()) //Vulnerabildiad explotada en formularios
                 //Usado para authentication basica de user y pass
-                .httpBasic(Customizer.withDefaults())
+//                .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(http -> {
+                    // EndPoints publicos
                     http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
+//                    // EndPoints Privados
+                    http.requestMatchers(HttpMethod.GET, "/method/get").hasAuthority("READ");
+//                    http.requestMatchers(HttpMethod.POST, "/method/post").hasAuthority("CREATE");
+//                    http.requestMatchers(HttpMethod.DELETE, "/method/delete").hasAuthority("DELETE");
+//                    http.requestMatchers(HttpMethod.PUT, "/method/put").hasAuthority("UPDATE");
+
+                    //Por defecto spring security pone como .denyAll() todas las demas request
+                    //SI SE VA A MEZCLAR EL USO DE ANOTACIONES CON authorizeHttpRequests SE DEBE PONER SI O SI esta linea.
+                    http.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //Sesion sin estado, no manejamos la sesion internamente, si no con tokens por ejemplo
                 //Agregamos el filtro del JWT creado, y se pone antes del filtro de authentication

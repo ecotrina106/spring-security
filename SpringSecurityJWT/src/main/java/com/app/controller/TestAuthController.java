@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/method")
 //Anotacion habilitada por spring security al poner EnableMethodSecurity en el SecurityConfig
-@PreAuthorize("denyAll()")
+//@PreAuthorize("denyAll()")
 public class TestAuthController {
 
 //    @GetMapping("/hello")
@@ -30,7 +30,7 @@ public class TestAuthController {
 
 
     @GetMapping("/get")
-    @PreAuthorize("has('READ')")
+//    @PreAuthorize("hasAuthority('READ')")
     public String helloGet(){
         return "Hello World - GET";
     }
@@ -47,13 +47,13 @@ public class TestAuthController {
     }
 
     @DeleteMapping("/delete")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public String helloDelete(){
         return "Hello World - DELETE";
     }
 
     @PatchMapping("/patch")
-    @PreAuthorize("hasAuthority('REFACTOR')")
+//    @PreAuthorize("hasAuthority('REFACTOR')")
     public String helloPatch(){
         return "Hello World - PATCH";
     }
