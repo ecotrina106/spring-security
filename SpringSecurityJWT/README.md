@@ -1,16 +1,18 @@
-# Spring-security-basic
-En este primer proyecto se realiza la creación de las politicas y configuraciones necesarias 
-para el uso de Spring Security, pero en este caso no se llega a implementar JWT, ya que primero
-se buscó conocer y profundizar en la base de Spring Security
+# Spring-security-JWT
+En este proyecto se toma como base el proyecto SprinSecurityBasic y se agrega el uso 
+de tokens JWT para la authentication
 
 ### **Se sigue la guía del video:**
-### https://www.youtube.com/watch?v=IPWBQDMIYkc
+### https://www.youtube.com/watch?v=wzGCBZCknUs
 
 La arquitectura seguida dentro de los componentes y configuraciones de spring security aplicadas
 en este proyecto son los de la siguiente imagen (tomada del video)
 
+A diferencia de la otra aquitectura se agrega JWTokenValidator
+![img.png](img.png)
+
 Se sigue la guía del video:
-https://www.youtube.com/watch?v=IPWBQDMIYkc
+https://www.youtube.com/watch?v=wzGCBZCknUs
 
 En el tema de la base de datos usada se utilizó docker
 
