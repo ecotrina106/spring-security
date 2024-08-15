@@ -1,8 +1,8 @@
-# Spring-JWT
+# Spring-security-Luis
 En este proyecto se ve otra implementación de Spring Security con JWT
 
 ### **Se sigue la guía del video:**
-### https://www.youtube.com/watch?v=nwqQYCM4YT8
+### https://www.youtube.com/watch?v=735a83FQR2I
 
 En esta implementación se usa la librería de token jwt - io.jsonwebtoken / jjwt-root
 

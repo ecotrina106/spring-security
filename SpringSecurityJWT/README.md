@@ -11,6 +11,8 @@ en este proyecto son los de la siguiente imagen (tomada del video)
 A diferencia de la otra aquitectura se agrega JWTokenValidator
 ![img.png](img.png)
 
+En esta implementación se usa la librería de token jwt - com.auth0 / java-jwt
+
 Se sigue la guía del video:
 https://www.youtube.com/watch?v=wzGCBZCknUs
 
